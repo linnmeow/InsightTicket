@@ -10,8 +10,8 @@ InsightTicket is an AI-powered customer support ticket routing and response syst
 
 ```
   [n8n Webhook] POST /ticket-received
-         │
-         ▼
+                     │
+                     ▼
   ┌─────────────────────────────────────────┐
   │             Ticket Input                │
   │  id, customer_name, email,              │
