@@ -21,10 +21,10 @@ InsightTicket is an AI-powered customer support ticket routing and response syst
                      ▼
   ┌─────────────────────────────────────────┐
   │         Pre-Processing Layer            │
-  │           preprocessor.py              │
+  │           preprocessor.py               │
   │  ─────────────────────────────────────  │
   │  • Urgency keyword detection            │
-  │    → "urgent" | "complex" | "simple"   │
+  │    → "urgent" | "complex" | "simple"    │
   └──────────────────┬──────────────────────┘
                      │
           ┌──────────┴──────────┐
