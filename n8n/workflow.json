@@ -18,7 +18,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://localhost:8000/process-ticket",
+        "url": "http://host.docker.internal:8000/process-ticket",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -125,12 +125,16 @@
               "value": "={{ $json.analysis.intent }}"
             },
             {
+              "name": "draft_response",
+              "value": "={{ $json.draft_response }}"
+            },
+            {
               "name": "action",
-              "value": "AUTOMATED — Response dispatched automatically"
+              "value": "AUTOMATED — Draft response generated, pending human review"
             },
             {
               "name": "message",
-              "value": "={{ 'Ticket ' + $json.ticket_id + ' handled automatically. Action: ' + $json.analysis.suggested_action }}"
+              "value": "={{ 'Ticket ' + $json.ticket_id + ' handled automatically. Draft response generated for review.' }}"
             }
           ],
           "number": [
