@@ -1,0 +1,252 @@
+{
+  "name": "InsightTicket — Support Ticket Routing",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ticket-received",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-webhook",
+      "name": "Webhook — Receive Ticket",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "insightticket-webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8000/process-ticket",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": []
+        },
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "node-http-request",
+      "name": "HTTP Request — InsightTicket API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.route }}",
+              "operation": "equal",
+              "value2": "escalate"
+            }
+          ]
+        }
+      },
+      "id": "node-if",
+      "name": "IF — Escalate or Automate?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "ticket_id",
+              "value": "={{ $json.ticket_id }}"
+            },
+            {
+              "name": "priority",
+              "value": "={{ $json.priority }}"
+            },
+            {
+              "name": "reason",
+              "value": "={{ $json.reason }}"
+            },
+            {
+              "name": "summary",
+              "value": "={{ $json.analysis.summary }}"
+            },
+            {
+              "name": "intent",
+              "value": "={{ $json.analysis.intent }}"
+            },
+            {
+              "name": "sentiment",
+              "value": "={{ $json.analysis.sentiment }}"
+            },
+            {
+              "name": "action",
+              "value": "ESCALATED — Assigned to human support agent"
+            },
+            {
+              "name": "message",
+              "value": "={{ 'Ticket ' + $json.ticket_id + ' has been escalated (priority: ' + $json.priority + '). Reason: ' + $json.reason }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-set-escalate",
+      "name": "Set — Escalation Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [900, 180]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "ticket_id",
+              "value": "={{ $json.ticket_id }}"
+            },
+            {
+              "name": "suggested_action",
+              "value": "={{ $json.analysis.suggested_action }}"
+            },
+            {
+              "name": "intent",
+              "value": "={{ $json.analysis.intent }}"
+            },
+            {
+              "name": "action",
+              "value": "AUTOMATED — Response dispatched automatically"
+            },
+            {
+              "name": "message",
+              "value": "={{ 'Ticket ' + $json.ticket_id + ' handled automatically. Action: ' + $json.analysis.suggested_action }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "confidence_score",
+              "value": "={{ $json.analysis.confidence_score }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-set-automate",
+      "name": "Set — Automation Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [900, 420]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "node-respond-escalate",
+      "name": "Respond to Webhook — Escalate",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 180]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "node-respond-automate",
+      "name": "Respond to Webhook — Automate",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 420]
+    }
+  ],
+  "connections": {
+    "Webhook — Receive Ticket": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request — InsightTicket API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request — InsightTicket API": {
+      "main": [
+        [
+          {
+            "node": "IF — Escalate or Automate?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF — Escalate or Automate?": {
+      "main": [
+        [
+          {
+            "node": "Set — Escalation Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set — Automation Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set — Escalation Result": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook — Escalate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set — Automation Result": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook — Automate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": ["support", "automation", "insightticket"],
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

@@ -1,0 +1,137 @@
+[
+  {
+    "id": "TKT-001",
+    "created_at": "2026-03-14T08:02:11Z",
+    "customer_name": "Marcus Webb",
+    "customer_email": "marcus.webb@example.com",
+    "subject": "Account hacked — unauthorized transactions on my account",
+    "message": "My account has been completely compromised. I noticed several unauthorized charges on my billing statement and someone changed my email address without my knowledge. This is a security breach and I need immediate action. Please lock my account right now and reverse the fraudulent charges. I am considering legal action if this is not resolved today.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-002",
+    "created_at": "2026-03-14T08:15:44Z",
+    "customer_name": "Priya Nair",
+    "customer_email": "priya.nair@example.com",
+    "subject": "Billing fraud — credit card charged without authorization",
+    "message": "I never signed up for your premium plan but my credit card was charged $149.99 last night. This is fraud. I have already contacted my bank to dispute the charge. I need a full refund immediately and an explanation of how my card details were used. This is completely unacceptable and I will be reporting this to the FTC if I do not hear back within 24 hours.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-003",
+    "created_at": "2026-03-14T08:31:07Z",
+    "customer_name": "Derek Olson",
+    "customer_email": "derek.olson@example.com",
+    "subject": "Complete service outage — production systems down",
+    "message": "Your service is completely down for our entire organization. We are an enterprise customer and our production systems depend on your API. We have been down for 45 minutes and are losing revenue every minute. This is a critical emergency. Our SLA guarantees 99.9% uptime and this outage is already in breach. I need your engineering team on this immediately and a status update every 15 minutes.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-004",
+    "created_at": "2026-03-14T09:05:22Z",
+    "customer_name": "Sofia Andersen",
+    "customer_email": "sofia.andersen@example.com",
+    "subject": "API webhook integration not working with our custom setup",
+    "message": "We are trying to integrate your webhook system with our internal microservices. The webhook fires but the payload format doesn't match what your documentation shows. Additionally, we're getting intermittent 401 errors even though our API key is correct. We also need to know if it's possible to configure custom retry logic. We're running this on AWS Lambda and the cold start times may be relevant. Several of our engineers have been looking at this and we're all confused.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-005",
+    "created_at": "2026-03-14T09:22:38Z",
+    "customer_name": "James Thornton",
+    "customer_email": "james.thornton@example.com",
+    "subject": "Multiple questions about enterprise migration and data portability",
+    "message": "We're considering migrating from our current plan to Enterprise. I have several questions: First, what does the data migration process look like and how long does it take? Second, can we export all historical data in a standard format? Third, do you support SSO with Okta? Furthermore, we need to understand your data residency options as we have GDPR compliance requirements. Additionally, what SLAs are included at the enterprise tier? This is blocking our procurement process.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-006",
+    "created_at": "2026-03-14T09:45:51Z",
+    "customer_name": "Chen Wei",
+    "customer_email": "chen.wei@example.com",
+    "subject": "Dashboard feature broken after recent update",
+    "message": "The analytics dashboard is not working correctly after your update last Tuesday. The charts don't load and when they do, the data looks wrong — numbers are way off from what we see in the API response directly. Also the export to CSV feature is completely broken. We use this dashboard every day for reporting to leadership. It doesn't work for any user on our team. We need this fixed urgently as we have a board report due Friday.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-007",
+    "created_at": "2026-03-14T10:02:14Z",
+    "customer_name": "Amara Diallo",
+    "customer_email": "amara.diallo@example.com",
+    "subject": "Confused about plan differences — unclear which one I need",
+    "message": "I've been looking at your pricing page for a while and I'm still unclear on the difference between the Pro and Business plans. Specifically I need to know if the Business plan includes API access, how many team members I can add, and whether the analytics features are different. Also your pricing page says 'custom integrations' under Business but doesn't explain what that means. Can someone help clarify? I want to upgrade but can't decide without understanding these differences.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-008",
+    "created_at": "2026-03-14T10:18:29Z",
+    "customer_name": "Liam O'Brien",
+    "customer_email": "liam.obrien@example.com",
+    "subject": "How do I reset my password?",
+    "message": "Hi, I forgot my password and can't log in to my account. I tried clicking the forgot password link on the login page but I haven't received the reset email. Can you help me reset it? My account email is liam.obrien@example.com. Thanks.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-009",
+    "created_at": "2026-03-14T10:33:45Z",
+    "customer_name": "Yuki Tanaka",
+    "customer_email": "yuki.tanaka@example.com",
+    "subject": "What is your refund policy?",
+    "message": "Hello, I signed up for the Pro plan two days ago and I'm not sure it's the right fit for my needs. I haven't really used it much yet. What is your refund policy? Do you offer a money-back guarantee? If so, how do I request a refund? Thank you.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-010",
+    "created_at": "2026-03-14T10:51:02Z",
+    "customer_name": "Rachel Kim",
+    "customer_email": "rachel.kim@example.com",
+    "subject": "How do I cancel my subscription?",
+    "message": "I'd like to cancel my subscription at the end of this billing period. I don't want to be charged again next month. How do I cancel? Will I lose access immediately or can I keep using it until the end of the period I've already paid for? Please let me know the steps.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-011",
+    "created_at": "2026-03-14T11:08:17Z",
+    "customer_name": "Tom Bauer",
+    "customer_email": "tom.bauer@example.com",
+    "subject": "When does my billing cycle renew?",
+    "message": "Quick question — I signed up on the 5th of last month. Does my billing renew on the 5th of each month? I want to make sure I know when I'll be charged. Also is there a way to see my billing history in the dashboard? Thanks.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-012",
+    "created_at": "2026-03-14T11:25:33Z",
+    "customer_name": "Nina Patel",
+    "customer_email": "nina.patel@example.com",
+    "subject": "Small UI bug — button text cut off on mobile",
+    "message": "Hi team, just wanted to report a minor display issue. On mobile (iPhone 15, Safari), the 'Save Changes' button on the account settings page has its text cut off — it shows 'Save Ch...' instead of the full text. It still works fine, just looks a bit off. Not urgent at all, just thought you'd want to know. Thanks for the great product otherwise!",
+    "status": "open"
+  },
+  {
+    "id": "TKT-013",
+    "created_at": "2026-03-14T11:42:48Z",
+    "customer_name": "Carlos Mendez",
+    "customer_email": "carlos.mendez@example.com",
+    "subject": "How do I add a team member to my account?",
+    "message": "Hello, I'm on the Pro plan and I want to invite my colleague to join my workspace. How do I add team members? Is there a limit on how many people I can invite? Where do I find the invite option in the settings? Thanks in advance.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-014",
+    "created_at": "2026-03-14T12:00:05Z",
+    "customer_name": "Fatima Al-Hassan",
+    "customer_email": "fatima.alhassan@example.com",
+    "subject": "Does the platform support two-factor authentication?",
+    "message": "Hi, I'm concerned about account security. Does your platform support two-factor authentication (2FA)? If so, how do I enable it? I'd prefer to use an authenticator app rather than SMS if possible. Thanks.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-015",
+    "created_at": "2026-03-14T12:17:22Z",
+    "customer_name": "Oliver Grant",
+    "customer_email": "oliver.grant@example.com",
+    "subject": "Feature request — dark mode for the dashboard",
+    "message": "Love the product! One thing I'd really like to see is a dark mode option for the dashboard. I use the platform a lot in the evenings and the bright white interface is a bit hard on the eyes. Is this something on your roadmap? Would be great to have. Keep up the good work!",
+    "status": "open"
+  }
+]

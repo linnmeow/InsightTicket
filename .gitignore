@@ -1,0 +1,22 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Vector store (generated on first run)
+vector_store/
+
+# Logs
+logs/
+
+# Dev/test scripts
+test_pipeline.py
+
+# macOS
+.DS_Store

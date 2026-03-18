@@ -1,0 +1,92 @@
+[
+  {
+    "id": "FAQ-001",
+    "question": "How do I reset my password?",
+    "answer": "To reset your password, click 'Forgot Password' on the login page and enter your account email address. You will receive a password reset link within 5 minutes. If the email doesn't arrive, check your spam folder. The reset link expires after 1 hour. If you still have trouble, contact support with your account email.",
+    "category": "account"
+  },
+  {
+    "id": "FAQ-002",
+    "question": "How do I cancel my subscription?",
+    "answer": "You can cancel your subscription at any time from Account Settings > Billing > Cancel Subscription. Your access will continue until the end of your current billing period — you will not be charged again after cancellation. We do not offer prorated refunds for partial months, but you keep full access until the period ends.",
+    "category": "billing"
+  },
+  {
+    "id": "FAQ-003",
+    "question": "What is your refund policy?",
+    "answer": "We offer a 14-day money-back guarantee for new subscribers. If you request a refund within 14 days of your initial purchase and have not used more than 20% of your plan's quota, we will issue a full refund within 5–7 business days. Renewals are not eligible for refunds. To request a refund, contact support with your order details.",
+    "category": "billing"
+  },
+  {
+    "id": "FAQ-004",
+    "question": "When does my billing cycle renew?",
+    "answer": "Your billing cycle renews on the same day of the month you originally subscribed. For example, if you signed up on the 5th, you will be charged on the 5th of each month. You can view your next billing date and full billing history in Account Settings > Billing. If your renewal date falls on a weekend or holiday, the charge processes on the next business day.",
+    "category": "billing"
+  },
+  {
+    "id": "FAQ-005",
+    "question": "How do I upgrade or downgrade my plan?",
+    "answer": "You can change your plan at any time in Account Settings > Billing > Change Plan. Upgrades take effect immediately and you are charged a prorated amount for the remainder of your billing cycle. Downgrades take effect at the start of your next billing cycle — you keep your current plan's features until then. No cancellation is required to switch plans.",
+    "category": "billing"
+  },
+  {
+    "id": "FAQ-006",
+    "question": "How do I add team members to my account?",
+    "answer": "To add team members, go to Account Settings > Team > Invite Member and enter their email address. They will receive an invitation email to join your workspace. The number of team members you can add depends on your plan: Starter allows 1 user, Pro allows up to 5 users, and Business allows unlimited users. Team members can be assigned Admin or Member roles.",
+    "category": "account"
+  },
+  {
+    "id": "FAQ-007",
+    "question": "Does the platform support two-factor authentication?",
+    "answer": "Yes, we support two-factor authentication (2FA) using authenticator apps (such as Google Authenticator, Authy, or 1Password) and SMS verification. To enable 2FA, go to Account Settings > Security > Two-Factor Authentication and follow the setup steps. We strongly recommend using an authenticator app rather than SMS for better security. Once enabled, 2FA is required at every login.",
+    "category": "account"
+  },
+  {
+    "id": "FAQ-008",
+    "question": "How do I use the API?",
+    "answer": "Our REST API is available on Pro and Business plans. To get started, generate an API key in Account Settings > API > Create Key. Include your key in the Authorization header as 'Bearer YOUR_API_KEY'. Full API documentation, including endpoint references, rate limits, and code examples, is available at docs.example.com/api. Rate limits are 1,000 requests/hour on Pro and 10,000 requests/hour on Business.",
+    "category": "technical"
+  },
+  {
+    "id": "FAQ-009",
+    "question": "How do I set up webhooks?",
+    "answer": "Webhooks allow you to receive real-time event notifications to your own server. To configure a webhook, go to Account Settings > Integrations > Webhooks > Add Webhook and enter your endpoint URL. Select the events you want to receive (e.g., data.updated, report.generated). Payloads are sent as HTTP POST requests with a JSON body and include an X-Signature header for verification. See our webhook documentation for payload schemas and retry logic details.",
+    "category": "technical"
+  },
+  {
+    "id": "FAQ-010",
+    "question": "What are the differences between the Pro and Business plans?",
+    "answer": "The Pro plan includes API access (1,000 req/hr), up to 5 team members, standard analytics, and email support. The Business plan includes API access (10,000 req/hr), unlimited team members, advanced analytics with custom dashboards, priority support with a dedicated account manager, SSO/SAML integration, custom integrations, and SLA guarantees. Both plans offer a 14-day free trial. Contact sales for Enterprise pricing with custom SLAs and data residency options.",
+    "category": "general"
+  },
+  {
+    "id": "FAQ-011",
+    "question": "How do I export my data?",
+    "answer": "You can export your data at any time from the dashboard. Go to Settings > Data > Export and choose your preferred format (CSV, JSON, or Excel). Large exports are processed in the background and you will receive an email with a download link when ready. Data exports include all records from your account history. For compliance or migration purposes, contact support for a full account data export.",
+    "category": "general"
+  },
+  {
+    "id": "FAQ-012",
+    "question": "How do I update my billing information or credit card?",
+    "answer": "To update your payment method, go to Account Settings > Billing > Payment Methods > Update Card. Enter your new card details and click Save. Your new card will be used for all future charges immediately. We accept Visa, Mastercard, American Express, and Discover. All payment information is encrypted and processed securely through Stripe — we do not store card numbers on our servers.",
+    "category": "billing"
+  },
+  {
+    "id": "FAQ-013",
+    "question": "Why am I getting a 401 unauthorized error with my API key?",
+    "answer": "A 401 error typically means your API key is invalid, expired, or missing from the request. Make sure you are passing the key correctly in the Authorization header as 'Bearer YOUR_API_KEY'. API keys can expire if not used for 90 days or if manually revoked. Check Account Settings > API to verify your key is active. If the key was recently created, allow up to 60 seconds for it to propagate. Generate a new key if the issue persists.",
+    "category": "technical"
+  },
+  {
+    "id": "FAQ-014",
+    "question": "What should I do if I suspect unauthorized access to my account?",
+    "answer": "If you suspect unauthorized access, act immediately: (1) Change your password right away via Account Settings > Security > Change Password. (2) Enable two-factor authentication if not already active. (3) Review Account Settings > Security > Active Sessions and log out all other sessions. (4) Check your billing history for any unauthorized charges. (5) Contact support immediately so we can review access logs and lock suspicious activity. Do not delay — account security issues are treated as our highest priority.",
+    "category": "account"
+  },
+  {
+    "id": "FAQ-015",
+    "question": "How do I contact support or escalate an issue?",
+    "answer": "You can reach our support team via: (1) In-app chat — fastest response, available 9am–6pm Monday–Friday. (2) Email at support@example.com — response within 24 hours. (3) For critical or production issues, use the 'Report Critical Issue' button in the Help menu to trigger our on-call escalation process. Business and Enterprise customers have access to priority support and a dedicated account manager for faster resolution.",
+    "category": "general"
+  }
+]
