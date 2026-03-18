@@ -32,49 +32,49 @@ InsightTicket is an AI-powered customer support ticket routing and response syst
        [urgent]           [complex / simple]
           │                     │
           ▼                     ▼
-   Fast-path            ┌───────────────────────────────────┐
-   Escalate             │         Analysis Agent            │
-   (skip LLM)           │        analysis_agent.py          │
-                        │  ─────────────────────────────    │
-                        │  • ChromaDB RAG retrieval         │ ◄── vector_store/
-                        │    (shared with draft step)       │ ◄── text-embedding-3-small
-                        │  • GPT-4o-mini LLM call 1         │
-                        │    - Intent classification        │
-                        │    - Sentiment detection          │
-                        │    - Entity extraction            │
-                        │    - Summarization                │
-                        │    - Confidence score (0–1.0)     │
-                        └──────────────┬────────────────────┘
-                                       │
-                                       ▼
-                        ┌───────────────────────────────────┐
-                        │         Decision Engine           │
-                        │        decision_engine.py         │
-                        │  ─────────────────────────────    │
-                        │  • Sentiment override → escalate  │
-                        │  • Confidence ≥ 0.70 + automatable│
-                        │    → automate                     │
-                        │  • Otherwise → escalate           │
-                        └──────────────┬────────────────────┘
-                                       │
-                    ┌──────────────────┴──────────────────┐
-                    │                                     │
-               [automate]                           [escalate]
-                    │                                     │
-                    ▼                                     ▼
-  ┌─────────────────────────────┐       ┌─────────────────────────────┐
-  │    Draft Response Generator │       │    Human Escalation Queue   │
-  │       draft_agent.py        │       │      FastAPI response        │
-  │  ─────────────────────────  │       │  full analysis context      │
-  │  • Reuses RAG context       │       │  for human agent review     │
-  │    (no 2nd embedding call)  │       └──────────────┬──────────────┘
-  │  • GPT-4o-mini LLM call 2   │                      │
-  │    Draft customer reply     │                      │
-  │  • Pending human review     │                      │
-  └──────────────┬──────────────┘                      │
-                 └─────────────────────┬───────────────┘
-                                       │
-                                       ▼
+   ┌─────────────┐      ┌───────────────────────────────────┐
+   │  Fast-path  │      │         Analysis Agent            │
+   │  Escalate   │      │        analysis_agent.py          │
+   │  (skip LLM) │      │  • ChromaDB RAG retrieval         │ ◄── vector_store/
+   └──────┬──────┘      │    (shared with draft step)       │ ◄── text-embedding-3-small
+          │             │  • GPT-4o-mini LLM call 1         │
+          │             │    - Intent classification        │
+          │             │    - Sentiment detection          │
+          │             │    - Entity extraction            │
+          │             │    - Summarization                │
+          │             │    - Confidence score (0–1.0)     │
+          │             └──────────────┬────────────────────┘
+          │                            │
+          │                            ▼
+          │             ┌───────────────────────────────────┐
+          │             │         Decision Engine           │
+          │             │        decision_engine.py         │
+          │             │  ─────────────────────────────    │
+          │             │  • Sentiment override → escalate  │
+          │             │  • Confidence ≥ 0.70 + automatable│
+          │             │    → automate                     │
+          │             │  • Otherwise → escalate           │
+          │             └──────────────┬────────────────────┘
+          │                            │
+          │         ┌──────────────────┴──────────────────┐
+          │         │                                     │
+          │    [automate]                           [escalate]
+          │         │                                     │
+          │         ▼                                     ▼
+          │  ┌─────────────────────────────┐   ┌─────────────────────────────┐
+          │  │    Draft Response Generator │   │    Human Escalation Queue   │
+          │  │       draft_agent.py        │   │  ─────────────────────────  │
+          │  │  ─────────────────────────  │   │  Full analysis context      │
+          │  │  • Reuses RAG context       │   │  returned for human agent   │
+          │  │    (no 2nd embedding call)  │   │  to review and action       │
+          │  │  • GPT-4o-mini LLM call 2   │   └──────────────┬──────────────┘
+          │  │    Draft customer reply     │                  │
+          │  │  • Pending human review     │                  │
+          │  └──────────────┬──────────────┘                  │
+          │                 └──────────────┬──────────────────┘
+          └────────────────────────────────┘
+                                           │
+                                           ▼
                         ┌───────────────────────────────────┐
                         │        Feedback & Logging         │
                         │           logger.py               │
