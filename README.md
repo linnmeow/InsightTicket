@@ -9,83 +9,87 @@ InsightTicket is an AI-powered customer support ticket routing and response syst
 ## Architecture
 
 ```
-  [n8n Webhook] POST /ticket-received
-                     │
-                     ▼
-  ┌─────────────────────────────────────────┐
-  │             Ticket Input                │
-  │  id, customer_name, email,              │
-  │  subject, message, status               │
-  └──────────────────┬──────────────────────┘
-                     │
-                     ▼
-  ┌─────────────────────────────────────────┐
-  │         Pre-Processing Layer            │
-  │           preprocessor.py               │
-  │  ─────────────────────────────────────  │
-  │  • Urgency keyword detection            │
-  │    → "urgent" | "complex" | "simple"    │
-  └──────────────────┬──────────────────────┘
-                     │
-          ┌──────────┴──────────┐
-          │                     │
-       [urgent]           [complex / simple]
-          │                     │
-          ▼                     ▼
-   ┌─────────────┐      ┌───────────────────────────────────┐
-   │  Fast-path  │      │         Analysis Agent            │
-   │  Escalate   │      │        analysis_agent.py          │
-   │  (skip LLM) │      │  • ChromaDB RAG retrieval         │ ◄── vector_store/
-   └──────┬──────┘      │    (shared with draft step)       │ ◄── text-embedding-3-small
-          │             │  • GPT-4o-mini LLM call 1         │
-          │             │    - Intent classification        │
-          │             │    - Sentiment detection          │
-          │             │    - Entity extraction            │
-          │             │    - Summarization                │
-          │             │    - Confidence score (0–1.0)     │
-          │             └──────────────┬────────────────────┘
-          │                            │
-          │                            ▼
-          │             ┌───────────────────────────────────┐
-          │             │         Decision Engine           │
-          │             │        decision_engine.py         │
-          │             │  ─────────────────────────────    │
-          │             │  • Sentiment override → escalate  │
-          │             │  • Confidence ≥ 0.70 + automatable│
-          │             │    → automate                     │
-          │             │  • Otherwise → escalate           │
-          │             └──────────────┬────────────────────┘
-          │                            │
-          │         ┌──────────────────┴──────────────────┐
-          │         │                                     │
-          │    [automate]                           [escalate]
-          │         │                                     │
-          │         ▼                                     ▼
-          │  ┌─────────────────────────────┐   ┌─────────────────────────────┐
-          │  │    Draft Response Generator │   │    Human Escalation Queue   │
-          │  │       draft_agent.py        │   │  ─────────────────────────  │
-          │  │  ─────────────────────────  │   │  Full analysis context      │
-          │  │  • Reuses RAG context       │   │  returned for human agent   │
-          │  │    (no 2nd embedding call)  │   │  to review and action       │
-          │  │  • GPT-4o-mini LLM call 2   │   └──────────────┬──────────────┘
-          │  │    Draft customer reply     │                  │
-          │  │  • Pending human review     │                  │
-          │  └──────────────┬──────────────┘                  │
-          │                 └──────────────┬──────────────────┘
-          └────────────────────────────────┘
-                                           │
-                                           ▼
-                        ┌───────────────────────────────────┐
-                        │        Feedback & Logging         │
-                        │           logger.py               │
-                        │  ─────────────────────────────    │
-                        │  • PII masking (email, phone)     │
-                        │  • logs/decisions.csv — all       │
-                        │    tickets: intent, sentiment,    │
-                        │    confidence, route, summary     │
-                        │  • logs/drafts.csv — automate     │
-                        │    tickets only: draft_response   │
-                        └───────────────────────────────────┘
+                    [n8n Webhook] POST /ticket-received
+                                      │
+                                      ▼
+                   ┌──────────────────────────────────────┐
+                   │       Ticket Created by Chatbot      │
+                   │  id, customer_name, email,           │
+                   │  subject, message, status            │
+                   └──────────────────┬───────────────────┘
+                                      │
+                                      ▼
+                   ┌──────────────────────────────────────┐
+                   │            Pre-Processor             │
+                   │          preprocessor.py             │
+                   │  • Urgency keyword detection         │
+                   │  → "urgent" | "complex" | "simple"   │
+                   └──────────────────┬───────────────────┘
+                                      │
+              ┌───────────────────────┴──────────────────────┐
+              │                                              │
+           [urgent]                               [complex / simple]
+    fast-path escalate                                       │
+    skip LLM · priority: high                               ▼
+              │                        ┌──────────────────────────────────────┐
+              │                        │           Analysis Agent             │
+              │                        │          analysis_agent.py           │
+              │                        │  • ChromaDB RAG retrieval            │ ◄── vector_store/
+              │                        │    (shared with draft step)          │ ◄── text-embedding-3-small
+              │                        │  • GPT-4o-mini LLM call 1            │
+              │                        │    - Intent classification           │
+              │                        │    - Sentiment detection             │
+              │                        │    - Entity extraction               │
+              │                        │    - Confidence score (0–1.0)        │
+              │                        │    - FAQ retrieval                   │
+              │                        └──────────────────┬───────────────────┘
+              │                                           │
+              │                                           ▼
+              │                        ┌──────────────────────────────────────┐
+              │                        │           Decision Engine            │
+              │                        │          decision_engine.py          │
+              │                        │  • Sentiment override → escalate     │
+              │                        │  • Confidence ≥ 0.70 + automatable   │
+              │                        │    → automate (priority: low)        │
+              │                        │  • Otherwise → escalate              │
+              │                        └──────────────┬───────────────────────┘
+              │                                       │
+              │                       ┌───────────────┴──────────────────┐
+              │                       │                                  │
+              │                  [automate]                        [escalate]
+              │                       │                                  │
+              │                       ▼                                  │
+              │        ┌──────────────────────────────────┐              │
+              │        │      Draft Response Generator    │              │
+              │        │          draft_agent.py          │              │
+              │        │  • Reuses RAG context            │              │
+              │        │    (no 2nd embedding call)       │              │
+              │        │  • GPT-4o-mini LLM call 2        │              │
+              │        │    Draft customer reply          │              │
+              │        └──────────────────┬───────────────┘              │
+              │                           │                              │
+              │                           ▼                              ▼
+              │        ┌──────────────────────────────────┐  ┌──────────────────────────────────┐
+              │        │     Human Review Dashboard       │  │     Human Escalation Queue       │
+              │        │   [ PLANNED · not yet built ]    │  │   [ PLANNED · not yet built ]    │
+              │        │  • Agent reviews draft reply     │  │  • Agent view & re-ranking       │
+              │        │  • Adjust & approve              │  │  • Notification layer            │
+              │        │  • Send to customer              │  │  • Time tracking                 │
+              │        └──────────────────┬───────────────┘  │  • Policy Agent alerts           │
+              │                           │                  └──────────────────┬───────────────┘
+              └───────────────────────────┤                                     │
+                                          └──────────────────┬──────────────────┘
+                                                             │
+                                                             ▼
+                   ┌──────────────────────────────────────────────┐
+                   │              Feedback & Logging              │
+                   │                 logger.py                    │
+                   │  • PII masking (email, phone, card)          │
+                   │  • logs/decisions.csv — all tickets:         │
+                   │    intent, sentiment, confidence, route      │
+                   │  • logs/drafts.csv — automate tickets only:  │
+                   │    draft_response                            │
+                   └──────────────────────────────────────────────┘
 ```
 
 ---
